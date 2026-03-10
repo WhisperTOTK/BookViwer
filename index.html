@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Little Dog</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./style.css">
+    <script defer src="./main.js"></script>
+</head>
+<body>
+
+    <button id="prev-btn" aria-label="Previous page">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/>
+            <polyline points="12 8 8 12 12 16"/>
+            <line x1="16" y1="12" x2="8" y2="12"/>
+        </svg>
+    </button>
+
+    <!-- The Book -->
+    <div id="book" class="book">
+
+        <!-- Paper 1 — Cover / Intro -->
+        <div id="p1" class="paper">
+            <div class="front">
+                <div id="f1" class="front-content">
+                    <div class="cover-decoration top-left"></div>
+                    <div class="cover-decoration bottom-right"></div>
+                    <p class="cover-label">A Story About</p>
+                    <h1 class="book-title">Little<br>Dog</h1>
+                    <div class="cover-rule"></div>
+                    <p class="cover-sub">Tales of loyalty & wonder</p>
+                </div>
+            </div>
+            <div class="back">
+                <div id="b1" class="back-content">
+                    <span class="chapter-tag">Introduction</span>
+                    <h2>A Small Creature,<br>A Big World</h2>
+                    <div class="rule"></div>
+                    <div class="content">
+                        <p>There is something irreplaceable about the love of a small dog — a warmth that occupies every corner of a room without taking up much space at all.</p>
+                        <p>They watch you with eyes that hold no judgment, only a steady, patient devotion that outlasts every bad day.</p>
+                        <p>This is a book about that love. About muddy paws on clean floors and the sound of claws on hardwood at midnight.</p>
+                        <p>About the particular silence of a house when the dog is somewhere else.</p>
+                    </div>
+                    <span class="page-num">1</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Paper 2 — Chapter 1 / Chapter 2 -->
+        <div id="p2" class="paper">
+            <div class="front">
+                <div id="f2" class="front-content">
+                    <span class="chapter-tag">Chapter One</span>
+                    <h1>The Morning<br>Ritual</h1>
+                    <div class="rule"></div>
+                    <div class="content">
+                        <p>Every morning begins the same way: a cold nose pressed to your cheek before the alarm has the chance to speak.</p>
+                        <p>It is not an interruption. It is a reminder that the day has already decided to be good, if you let it.</p>
+                        <p>The little dog circles twice — always twice — and settles against your legs like a warm stone while the coffee brews.</p>
+                    </div>
+                    <span class="page-num">2</span>
+                </div>
+            </div>
+            <div class="back">
+                <div id="b2" class="back-content">
+                    <span class="chapter-tag">Chapter Two</span>
+                    <h1>On Walks &<br>Wandering</h1>
+                    <div class="rule"></div>
+                    <div class="content">
+                        <p>A walk with a small dog is not really a walk. It is an expedition. Every lamppost is a landmark, every puddle a potential ocean.</p>
+                        <p>You learn to be patient. You learn to stop. You discover, grudgingly and then gratefully, that the world contains far more interesting smells than you ever suspected.</p>
+                        <p>This, perhaps, is the dog's greatest gift: the insistence that things are worth noticing.</p>
+                    </div>
+                    <span class="page-num">3</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Paper 3 — Chapter 3 / Back Cover -->
+        <div id="p3" class="paper">
+            <div class="front">
+                <div id="f3" class="front-content">
+                    <span class="chapter-tag">Chapter Three</span>
+                    <h1>The Art of<br>Being Still</h1>
+                    <div class="rule"></div>
+                    <div class="content">
+                        <p>Late afternoons belong to the dog. The light slants gold across the floor and the little creature finds the exact center of it and does not move.</p>
+                        <p>You watch, and without meaning to, you slow down too. Your shoulders drop. Your breath evens out.</p>
+                        <p>There is nothing to do, the dog seems to say, that cannot wait for the patch of sun to pass.</p>
+                    </div>
+                    <span class="page-num">4</span>
+                </div>
+            </div>
+            <div class="back">
+                <div id="b3" class="back-content">
+                    <div class="cover-decoration top-left" style="opacity:.15;"></div>
+                    <div class="cover-decoration bottom-right" style="opacity:.15;"></div>
+                    <p class="cover-label" style="color:var(--gold-mid);">The End</p>
+                    <h1 class="book-title" style="font-size:2.6em; margin-bottom:16px;">Little Dog</h1>
+                    <div class="cover-rule"></div>
+                    <p class="cover-sub" style="margin-top:16px; font-size:.85em; max-width:220px; text-align:center; line-height:1.7; opacity:.7;">
+                        "Until one has loved an animal,<br>a part of one's soul remains unawakened."
+                    </p>
+                    <p class="cover-sub" style="font-size:.75em; margin-top:10px; opacity:.5;">— Anatole France</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <button id="next-btn" aria-label="Next page">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/>
+            <polyline points="12 8 16 12 12 16"/>
+            <line x1="8" y1="12" x2="16" y2="12"/>
+        </svg>
+    </button>
+
+</body>
+</html>

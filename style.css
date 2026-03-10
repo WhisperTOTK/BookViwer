@@ -1,0 +1,359 @@
+/* ── Reset & Base ─────────────────────────────────────────────────── */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+}
+
+:root {
+    --bg:        #1c1409;
+    --bg2:       #2a1e0c;
+    --gold:      #c8922a;
+    --gold-mid:  #e0b060;
+    --gold-lite: #f5d98b;
+    --paper:     #faf4e8;
+    --paper2:    #f0e6d0;
+    --ink:       #1e120a;
+    --ink-mid:   #3d2510;
+    --ink-lite:  #7a5030;
+    --shadow:    rgba(20, 10, 0, 0.5);
+    --radius:    3px 8px 8px 3px;
+    --transition-speed: 0.55s;
+}
+
+html, body {
+    width: 100%; height: 100%;
+    overflow: hidden;
+    touch-action: none;
+}
+
+body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Lato', sans-serif;
+    background-color: var(--bg);
+    background-image:
+        radial-gradient(ellipse at 25% 35%, var(--bg2) 0%, transparent 55%),
+        radial-gradient(ellipse at 75% 65%, #2e1c0a 0%, transparent 55%);
+    user-select: none;
+    -webkit-user-select: none;
+    gap: 0;
+}
+
+/* Subtle wood-grain texture overlay */
+body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image:
+        repeating-linear-gradient(89deg, transparent 0, transparent 20px, rgba(255,255,255,0.008) 20px, rgba(255,255,255,0.008) 21px),
+        repeating-linear-gradient(91deg, transparent 0, transparent 35px, rgba(0,0,0,0.025) 35px, rgba(0,0,0,0.025) 36px);
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* ── Buttons ──────────────────────────────────────────────────────── */
+button {
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    transition: transform var(--transition-speed) cubic-bezier(.4,0,.2,1),
+                opacity 0.2s;
+    z-index: 10;
+    position: relative;
+    flex-shrink: 0;
+}
+
+button:focus { outline: none; }
+button:disabled { opacity: 0.2; pointer-events: none; }
+
+button svg {
+    width: 52px; height: 52px;
+    color: var(--gold-mid);
+    transition: color 0.2s, transform 0.15s;
+    display: block;
+    filter: drop-shadow(0 2px 6px rgba(0,0,0,0.5));
+}
+
+button:hover:not(:disabled) svg {
+    color: var(--gold-lite);
+    transform: scale(1.08);
+}
+
+#prev-btn { margin-right: 20px; }
+#next-btn { margin-left:  20px; }
+
+/* ── Book Container ───────────────────────────────────────────────── */
+.book {
+    width: clamp(280px, 42vw, 380px);
+    height: clamp(380px, 58vh, 540px);
+    position: relative;
+    transition: transform var(--transition-speed) cubic-bezier(.4,0,.2,1);
+    z-index: 1;
+
+    /* Multi-layer shadow for depth */
+    filter: drop-shadow(0 20px 40px rgba(0,0,0,0.6))
+            drop-shadow(0 4px 8px rgba(0,0,0,0.4));
+}
+
+/* Book spine glow */
+.book::before {
+    content: '';
+    position: absolute;
+    left: -3px; top: 4%; bottom: 4%;
+    width: 6px;
+    background: linear-gradient(to right, rgba(200,146,42,0.5), transparent);
+    border-radius: 2px 0 0 2px;
+    pointer-events: none;
+}
+
+/* ── Paper (individual pages) ─────────────────────────────────────── */
+.paper {
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    top: 0; left: 0;
+    perspective: 1800px;
+}
+
+/* Front and back faces */
+.front,
+.back {
+    position: absolute;
+    width: 100%; height: 100%;
+    top: 0; left: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transform-origin: left center;
+    transition: transform var(--transition-speed) cubic-bezier(.42, 0, .3, 1);
+    border-radius: var(--radius);
+    overflow: hidden;
+}
+
+.front {
+    z-index: 1;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    background: var(--paper);
+    background-image:
+        linear-gradient(to right, rgba(0,0,0,0.06) 0%, transparent 8%),
+        repeating-linear-gradient(transparent 0px, transparent 28px, rgba(160,130,90,0.12) 28px, rgba(160,130,90,0.12) 29px);
+    border-left: 3px solid rgba(200,146,42,0.3);
+    box-shadow:
+        inset -4px 0 12px rgba(0,0,0,0.08),
+        inset  1px 0  4px rgba(255,200,100,0.06);
+}
+
+.back {
+    z-index: 0;
+    background: var(--paper);
+    background-image:
+        linear-gradient(to left, rgba(0,0,0,0.04) 0%, transparent 8%),
+        repeating-linear-gradient(transparent 0px, transparent 28px, rgba(160,130,90,0.12) 28px, rgba(160,130,90,0.12) 29px);
+    border-right: 2px solid rgba(200,146,42,0.15);
+}
+
+/* Flipped state */
+.flipped .front,
+.flipped .back {
+    transform: rotateY(-180deg);
+}
+
+/* Back-face content must be mirrored */
+.back-content {
+    transform: rotateY(180deg);
+}
+
+/* Stacking order */
+#p1 { z-index: 3; }
+#p2 { z-index: 2; }
+#p3 { z-index: 1; }
+
+/* Page-lift shadow effect: darkens the right edge of front as it lifts */
+.front::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: var(--radius);
+    background: linear-gradient(to left, rgba(0,0,0,0) 0%, rgba(0,0,0,0.18) 100%);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s;
+}
+.flipped .front::after { opacity: 1; }
+
+/* ── Content Layouts ──────────────────────────────────────────────── */
+.front-content,
+.back-content {
+    width: 100%; height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: clamp(20px, 5%, 36px) clamp(20px, 6%, 40px);
+    position: relative;
+}
+
+/* ── Cover Page Styling ───────────────────────────────────────────── */
+#f1 {
+    background: linear-gradient(155deg, #1a0e04 0%, #2c1a08 40%, #1e1006 100%);
+    color: var(--gold-lite);
+    align-items: flex-start;
+    padding-left: clamp(24px, 7%, 44px);
+}
+
+#f1 .cover-label {
+    font-family: 'Lato', sans-serif;
+    font-weight: 300;
+    font-size: clamp(9px, 1.5vw, 11px);
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--gold-mid);
+    margin-bottom: clamp(8px, 2vh, 16px);
+}
+
+#f1 .book-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(38px, 7vw, 68px);
+    font-weight: 700;
+    color: var(--gold-lite);
+    line-height: 0.95;
+    margin-bottom: clamp(14px, 2.5vh, 22px);
+    letter-spacing: -0.01em;
+}
+
+#f1 .cover-rule {
+    width: 60px; height: 1px;
+    background: linear-gradient(to right, var(--gold), transparent);
+    margin-bottom: clamp(10px, 2vh, 16px);
+}
+
+#f1 .cover-sub {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: clamp(11px, 1.8vw, 14px);
+    color: var(--gold-mid);
+    opacity: 0.8;
+}
+
+/* Corner decorations on cover */
+.cover-decoration {
+    position: absolute;
+    width: 48px; height: 48px;
+    border-color: var(--gold);
+    border-style: solid;
+    opacity: 0.35;
+}
+.cover-decoration.top-left {
+    top: 14px; left: 14px;
+    border-width: 1px 0 0 1px;
+}
+.cover-decoration.bottom-right {
+    bottom: 14px; right: 14px;
+    border-width: 0 1px 1px 0;
+}
+
+/* ── Back Cover (#b3) ─────────────────────────────────────────────── */
+#b3 {
+    background: linear-gradient(155deg, #1a0e04 0%, #2c1a08 40%, #1e1006 100%);
+    align-items: center;
+}
+
+/* ── Inner Pages ──────────────────────────────────────────────────── */
+.chapter-tag {
+    font-size: clamp(8px, 1.3vw, 10px);
+    letter-spacing: 0.38em;
+    text-transform: uppercase;
+    color: var(--gold);
+    font-weight: 700;
+    margin-bottom: clamp(10px, 2.5vh, 20px);
+    opacity: 0.9;
+    align-self: flex-start;
+}
+
+h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(20px, 3.5vw, 30px);
+    font-weight: 700;
+    color: var(--ink);
+    line-height: 1.15;
+    margin-bottom: 0;
+    align-self: flex-start;
+}
+
+.rule {
+    width: 44px; height: 1.5px;
+    background: var(--gold);
+    opacity: 0.5;
+    margin: clamp(10px, 2vh, 18px) 0;
+    flex-shrink: 0;
+    align-self: flex-start;
+}
+
+.content {
+    align-self: stretch;
+}
+
+.content p, #b1 p {
+    font-size: clamp(11.5px, 1.6vw, 13.5px);
+    line-height: 1.8;
+    color: var(--ink-mid);
+    margin-bottom: clamp(8px, 1.5vh, 14px);
+}
+.content p:last-child, #b1 p:last-child { margin-bottom: 0; }
+
+/* Drop cap on first paragraph */
+.content p:first-child::first-letter,
+#b1 p:first-child::first-letter {
+    font-family: 'Playfair Display', serif;
+    font-size: 3em;
+    font-weight: 700;
+    color: var(--gold);
+    float: left;
+    line-height: 0.8;
+    margin: 4px 5px 0 0;
+}
+
+/* Page numbers */
+.page-num {
+    position: absolute;
+    bottom: 14px;
+    right: clamp(16px, 4%, 28px);
+    font-size: 11px;
+    color: rgba(61, 37, 16, 0.35);
+    letter-spacing: 0.1em;
+    font-family: 'Playfair Display', serif;
+}
+
+/* Specific back-content overrides */
+#b1 {
+    padding: clamp(18px, 4%, 32px) clamp(20px, 5%, 36px);
+    align-items: flex-start;
+    justify-content: flex-start;
+    padding-top: clamp(24px, 5%, 40px);
+}
+
+#b1 h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(18px, 3vw, 26px);
+    font-weight: 700;
+    color: var(--ink);
+    line-height: 1.2;
+    margin-bottom: 0;
+}
+
+/* ── Responsive tweaks ────────────────────────────────────────────── */
+@media (max-width: 600px) {
+    #prev-btn { margin-right: 10px; }
+    #next-btn { margin-left:  10px; }
+
+    button svg { width: 40px; height: 40px; }
+}
+
+@media (max-height: 500px) {
+    .book {
+        height: 85vh;
+    }
+}
